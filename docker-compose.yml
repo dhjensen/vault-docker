@@ -1,0 +1,31 @@
+name: Vault
+
+services:
+  vault:
+    image: hashicorp/vault:${VAULT_VERSION}
+    container_name: vault
+    volumes:
+      - vault-logs:/vault/logs:rw
+      - vault-raft:/vault/raft:rw
+      - ./config/:/vault/config:rw
+      - /etc/timezone:/etc/timezone:ro
+    ports:
+      - "127.0.0.1:8220:8220"
+    networks:
+      - nginx-proxy-manager_frontend
+    command:
+      - server
+    restart: unless-stopped
+    labels:
+      - wud.tag.include=^\d+\.\d+\.\d+$$
+    cap_add:
+      - IPC_LOCK
+
+networks:
+  nginx-proxy-manager_frontend:
+    external: true
+    driver: bridge
+
+volumes:
+  vault-logs:
+  vault-raft:
