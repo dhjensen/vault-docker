@@ -1,16 +1,16 @@
 name: Vault
 
 services:
-  vault:
+  node1: &node-default
     image: hashicorp/vault:${VAULT_VERSION}
-    container_name: vault
+    container_name: node1
     volumes:
-      - vault-logs:/vault/logs:rw
-      - vault-raft:/vault/raft:rw
-      - ./config/:/vault/config:rw
+      - vault-node1-logs:/vault/logs:rw
+      - vault-node1-raft:/vault/raft:rw
+      - ./node1/:/vault/config:rw
       - /etc/timezone:/etc/timezone:ro
     ports:
-      - "127.0.0.1:8220:8220"
+      - "127.0.0.1:8221:8221"
     networks:
       - nginx-proxy-manager_frontend
     command:
@@ -21,11 +21,37 @@ services:
     cap_add:
       - IPC_LOCK
 
+  node2:
+    <<: *node-default
+    container_name: node2
+    volumes:
+      - vault-node2-logs:/vault/logs:rw
+      - vault-node2-raft:/vault/raft:rw
+      - ./node2/:/vault/config:rw
+      - /etc/timezone:/etc/timezone:ro
+    ports:
+      - "127.0.0.1:8222:8222"
+
+  node3:
+    <<: *node-default
+    container_name: node3
+    volumes:
+      - vault-node3-logs:/vault/logs:rw
+      - vault-node3-raft:/vault/raft:rw
+      - ./node3/:/vault/config:rw
+      - /etc/timezone:/etc/timezone:ro
+    ports:
+      - "127.0.0.1:8223:8223"
+
 networks:
   nginx-proxy-manager_frontend:
     external: true
     driver: bridge
 
 volumes:
-  vault-logs:
-  vault-raft:
+  vault-node1-logs:
+  vault-node1-raft:
+  vault-node2-logs:
+  vault-node2-raft:
+  vault-node3-logs:
+  vault-node3-raft:
