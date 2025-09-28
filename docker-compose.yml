@@ -21,7 +21,6 @@ services:
       - wud.tag.include=^\d+\.\d+\.\d+$$
       - traefik.enable=true
       - traefik.http.routers.node1-vault.rule=Host(`${NODE1_FQDN}`)
-      - traefik.http.routers.node1-vault.middlewares=ipallowlocal@docker
       - traefik.http.services.node1-vault.Loadbalancer.server.port=8221
     cap_add:
       - IPC_LOCK
@@ -40,7 +39,6 @@ services:
       - wud.tag.include=^\d+\.\d+\.\d+$$
       - traefik.enable=true
       - traefik.http.routers.node2-vault.rule=Host(`${NODE2_FQDN}`)
-      - traefik.http.routers.node2-vault.middlewares=ipallowlocal@docker
       - traefik.http.services.node2-vault.Loadbalancer.server.port=8222
 
   node3:
@@ -57,7 +55,6 @@ services:
       - wud.tag.include=^\d+\.\d+\.\d+$$
       - traefik.enable=true
       - traefik.http.routers.node3-vault.rule=Host(`${NODE3_FQDN}`)
-      - traefik.http.routers.node3-vault.middlewares=ipallowlocal@docker
       - traefik.http.services.node3-vault.Loadbalancer.server.port=8223
 
 networks:
