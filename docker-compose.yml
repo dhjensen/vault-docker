@@ -12,7 +12,6 @@ services:
     ports:
       - "127.0.0.1:8221:8221"
     networks:
-      - nginx-proxy-manager_frontend
       - backend
     command:
       - server
@@ -21,6 +20,7 @@ services:
       - wud.tag.include=^\d+\.\d+\.\d+$$
       - traefik.enable=true
       - traefik.http.routers.node1-vault.rule=Host(`${NODE1_FQDN}`)
+      - traefik.http.routers.node1-vault.middlewares=ipallowlist@docker
       - traefik.http.services.node1-vault.Loadbalancer.server.port=8221
     cap_add:
       - IPC_LOCK
@@ -39,6 +39,7 @@ services:
       - wud.tag.include=^\d+\.\d+\.\d+$$
       - traefik.enable=true
       - traefik.http.routers.node2-vault.rule=Host(`${NODE2_FQDN}`)
+      - traefik.http.routers.node2-vault.middlewares=ipallowlist@docker
       - traefik.http.services.node2-vault.Loadbalancer.server.port=8222
 
   node3:
@@ -55,12 +56,10 @@ services:
       - wud.tag.include=^\d+\.\d+\.\d+$$
       - traefik.enable=true
       - traefik.http.routers.node3-vault.rule=Host(`${NODE3_FQDN}`)
+      - traefik.http.routers.node3-vault.middlewares=ipallowlist@docker
       - traefik.http.services.node3-vault.Loadbalancer.server.port=8223
 
 networks:
-  nginx-proxy-manager_frontend:
-    external: true
-    driver: bridge
   backend:
     external: true
     driver: bridge
